@@ -8,5 +8,5 @@ http
     res.end("Hii");
   })
   .listen(PORT, () => {
-    console.log(`server started ${pid}`);
+    console.log(`Server started. Process: ${pid}`);
   });

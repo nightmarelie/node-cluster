@@ -8,7 +8,11 @@ if (cluster.isMaster) {
   console.log(`Muster started! Process: ${pid}`);
 
   for (let i = 0; i < cpus - 1; i++) {
-    cluster.fork();
+    const worker = cluster.fork();
+    worker.on("exit", () => {
+      console.log(`Worker died! Process: ${worker.process.pid}`);
+      cluster.fork();
+    });
   }
 }
 

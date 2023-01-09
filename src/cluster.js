@@ -11,8 +11,8 @@ if (cluster.isMaster) {
     cluster.fork();
   }
 
-  cluster.on("exit", (worker) => {
-    console.log(`Wokrker died! Process: ${worker.process.pid}`);
+  cluster.on("exit", (worker, code) => {
+    console.log(`Wokrker died! Process: ${worker.process.pid}. Code: ${code}`);
     cluster.fork();
   });
 }
@@ -20,10 +20,4 @@ if (cluster.isMaster) {
 if (cluster.isWorker) {
   console.log("Worker started!");
   require("./worker.js");
-
-  process.on("message", (msg) => {
-    console.log(`Hello from master: ${msg}`);
-  });
-
-  process.send(`Hiiiiiii ${process.pid}`);
 }

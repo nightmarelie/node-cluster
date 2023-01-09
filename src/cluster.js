@@ -8,12 +8,13 @@ if (cluster.isMaster) {
   console.log(`Muster started! Process: ${pid}`);
 
   for (let i = 0; i < cpus - 1; i++) {
-    const worker = workerResurrection(cluster);
-    worker.send(`Hello ${worker.process.pid}`);
-    worker.on("message", (msg) => {
-      console.log(`Hello from worker: ${msg}`);
-    });
+    cluster.fork();
   }
+
+  cluster.on("exit", (worker) => {
+    console.log(`Wokrker died! Process: ${worker.process.pid}`);
+    cluster.fork();
+  });
 }
 
 if (cluster.isWorker) {
@@ -25,15 +26,4 @@ if (cluster.isWorker) {
   });
 
   process.send(`Hiiiiiii ${process.pid}`);
-}
-
-function workerResurrection(cluster) {
-  const worker = cluster.fork();
-
-  worker.on("exit", () => {
-    console.log(`Worker died! Process: ${worker.process.pid}`);
-    workerResurrection(cluster);
-  });
-
-  return worker;
 }

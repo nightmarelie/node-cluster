@@ -2,5 +2,12 @@
   "name": "node-cluster",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "load": "autocannon -c 200 -d 10 http://localhost:8800"
+  },
+  "devDependencies": {
+    "autocannon": "^7.10.0"
+  }
 }

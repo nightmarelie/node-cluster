@@ -13,7 +13,11 @@ if (cluster.isMaster) {
 
   cluster.on("exit", (worker, code) => {
     console.log(`Wokrker died! Process: ${worker.process.pid}. Code: ${code}`);
-    cluster.fork();
+
+    // fork a process only if something going wrong
+    if (code === 1) {
+      cluster.fork();
+    }
   });
 }
 
